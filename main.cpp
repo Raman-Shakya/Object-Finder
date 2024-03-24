@@ -2,12 +2,14 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <iostream>
+
 #include "Block.h"
+#include "World.h"
 #include "Player.h"
+#include "Object.h"
 
-Block newBlck = Block(0, 0, 1);
-Block newBlck2 = Block(1, 0, 1);
-
+World world = World(10);
+Object obj = Object(0,1);
 Player player = Player();
 
 
@@ -28,8 +30,8 @@ void Draw() {
 	glLoadIdentity();
 	player.positionCamera();
 	
-	newBlck.render();
-	newBlck2.render();
+	world.render();
+	obj.render();
 	
 	glutSwapBuffers();
 }
