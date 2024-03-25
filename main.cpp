@@ -9,7 +9,7 @@
 #include "Object.h"
 
 World world = World(10);
-Object obj = Object(0,1);
+Object obj = Object(1,4);
 Player player = Player();
 
 
@@ -45,11 +45,12 @@ void Key(unsigned char ch, int x, int y) {
 		case 'q': player.lookLeft(); break;
 		case 'e': player.lookRight(); break;
 	}
+	world.correctPlayer(player);
+//	player.showPos();
 	glutPostRedisplay();
 }
 
 int main(int argC, char *argV[]) {
-	std::cout << "hello world" << std::endl;
 	glutInit(&argC, argV);
 	glutInitWindowSize(600, 600);
 	glutInitWindowPosition(100, 150);

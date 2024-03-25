@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <math.h>
 #include "constant.h"
 #include "Player.h"
 #include "Block.h"
@@ -44,6 +45,17 @@ class World {
 			}
 		}
 	}
+	void pushFromBlock(Player &pl, int x, int z) {
+		std::cout << "before: " << pl.pos[0] << " " << pl.pos[2] << std::endl;
+		// player should not be within x-WIDTH/2 to x+width/2
+		if (pl.pos[0] < x*WIDTH && pl.pos[0]>(x-0.5)*WIDTH) pl.pos[0] = (x-0.6)*WIDTH;
+		if (pl.pos[0] > x*WIDTH && pl.pos[0]>(x+0.5)*WIDTH) pl.pos[0] = (x+0.6)*WIDTH;
+		// player should not be within z-WIDTH/2 to z+width/2
+		if (pl.pos[2] < z*WIDTH && pl.pos[2]>(z-0.5)*WIDTH) pl.pos[2] = (z-0.6)*WIDTH;
+		if (pl.pos[2] > z*WIDTH && pl.pos[2]>(z+0.5)*WIDTH) pl.pos[2] = (z+0.6)*WIDTH;
+		std::cout << "after: " << pl.pos[0] << " " << pl.pos[2] << std::endl;
+	}
+	
 public:
 	World(int level=10) {
 		currentLevel = level;	
@@ -66,6 +78,28 @@ public:
 					mainGrid[i][j]->render();
 				}
 			}
+		}
+	}
+	
+	void correctPlayer(Player &pl) {
+		int posx = round(pl.pos[0]/WIDTH), posz = round(pl.pos[2]/WIDTH);
+
+		int upBlock = tempGrid[posx-1][posz] == '#',
+			downBlock = tempGrid[posx+1][posz] == '#',
+			leftBlock = tempGrid[posx][posz+1] == '#',
+			rightBlock = tempGrid[posx][posz-1] == '#';
+		
+		if (upBlock) {
+			if (pl.pos[0] < (posx-0.3)*WIDTH) pl.pos[0] = (posx-0.3)*WIDTH;
+		}
+		if (downBlock) {
+			if (pl.pos[0] > (posx+0.3)*WIDTH) pl.pos[0] = (posx+0.3)*WIDTH;
+		}
+		if (leftBlock) {
+			if (pl.pos[2] > (posz+0.3)*WIDTH) pl.pos[2] = (posz+0.3)*WIDTH;
+		}
+		if (rightBlock) {
+			if (pl.pos[2] < (posz-0.3)*WIDTH) pl.pos[2] = (posz-0.3)*WIDTH;
 		}
 	}
 };

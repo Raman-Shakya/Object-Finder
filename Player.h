@@ -4,7 +4,10 @@
 #include <math.h>
 #include <iostream>
 
+class World;
 class Player {
+	friend class World;
+	
 	GLfloat pos[3];
 	GLfloat dir[4];
 	double delta, cosA, sinA;
@@ -18,7 +21,7 @@ class Player {
 public:
 	Player() {
 		delta = 0.1;
-		pos[0] = 0; pos[1] = 0; pos[2] = 3;
+		pos[0] = WIDTH; pos[1] = 0; pos[2] = WIDTH;
 		dir[0] = 0; dir[1] = 0; dir[2] = -0.1;
 		sinA = sin(delta);
 		cosA = cos(delta);
@@ -26,7 +29,9 @@ public:
 	}
 	~Player() {
 	}
-	
+	void showPos() {
+		std::cout << pos[0] << " " << pos[2] << std::endl;
+	}
 	void lookLeft() {
 		GLfloat nextX = dir[0] * cosA + dir[2] * sinA;
 		GLfloat nextZ = -dir[0] * sinA + dir[2] * cosA;
