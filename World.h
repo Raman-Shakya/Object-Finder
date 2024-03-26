@@ -2,6 +2,10 @@
 
 #include <iostream>
 #include <math.h>
+#include <vector>
+#include <algorithm>
+#include <bits/stdc++.h> 
+
 #include "constant.h"
 #include "Player.h"
 #include "Block.h"
@@ -11,6 +15,7 @@ class World {
 	char tempGrid[MAX_LEVEL][MAX_LEVEL];	// map in character grid
 	Block *mainGrid[MAX_LEVEL][MAX_LEVEL];  // main map to render
 	int currentLevel;	// size of the current nxn level
+	int seed = 1;
 	
 	void resetLevel() {
 		int i, j;
@@ -22,19 +27,47 @@ class World {
 		}
 		drawLevel();
 	}
+	void generateLevel(char temp[MAX_LEVEL][MAX_LEVEL], int i, int j) {
+		if (i==currentLevel-2 && j==currentLevel-2) {
+			return;
+		}
+	    srand(seed);
+	    
+		std::vector< std::pair<int, int> > orientation;
+		orientation.push_back({0, -1});
+		orientation.push_back({0,  1});
+		orientation.push_back({-1, 0});
+		orientation.push_back({1,  0});
+		std::random_shuffle(orientation.begin(), orientation.end());
+		seed = rand();
+		
+		// main part
+		int iter;
+		for (iter=0; iter<orientation.size(); iter++) {
+			int destI = i+2*orientation[iter].first, destJ = j+2*orientation[iter].second;
+			if (destI > 0 && destJ > 0 && destI < currentLevel-1 && destJ < currentLevel-1 && temp[destI][destJ]=='#') {
+				temp[i+orientation[iter].first][j+orientation[iter].second] = ' ';
+				temp[destI][destJ] = ' ';
+				generateLevel(temp, destI, destJ);
+			}
+		}
+	}
 	void drawLevel() {
-		char temp[currentLevel+1][currentLevel+1] = {
-			"#########",
-			"# #     #",
-			"# # ### #",
-			"#   #   #",
-			"##### ###",
-			"#   #   #",
-			"# # # ###",
-			"# #     #",
-			"#########",
-		};
+		char temp[MAX_LEVEL][MAX_LEVEL];
 		int i,j;
+		temp[1][1] = ' ';
+		// empty
+		for (i=0; i<currentLevel; i++)
+			for (j=0; j<currentLevel; j++)
+				temp[i][j]='#';
+		generateLevel(temp, 1, 1);
+		for (i=0; i<currentLevel; i++){
+			for (j=0; j<currentLevel; j++)
+				std::cout << temp[i][j] << " ";
+			std::cout << std::endl;
+		}
+				
+				
 		for (i=0; i<currentLevel; i++) {
 			for (j=0; j<currentLevel; j++) {
 				tempGrid[i][j] = temp[i][j];

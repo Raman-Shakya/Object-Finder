@@ -8,7 +8,7 @@
 #include "Player.h"
 #include "Object.h"
 
-World world = World(10);
+World world = World(21);
 Object obj = Object(1,4);
 Player player = Player();
 
@@ -52,7 +52,7 @@ void Key(unsigned char ch, int x, int y) {
 
 int main(int argC, char *argV[]) {
 	glutInit(&argC, argV);
-	glutInitWindowSize(600, 600);
+	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 150);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow("Object Finder");
