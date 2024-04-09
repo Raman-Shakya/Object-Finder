@@ -22,7 +22,7 @@ public:
 	Player() {
 		delta = 0.1;
 		pos[0] = WIDTH; pos[1] = 0; pos[2] = WIDTH;
-		dir[0] = 0; dir[1] = 0; dir[2] = -0.1;
+		dir[0] = 0.05; dir[1] = 0; dir[2] = 0.05;
 		sinA = sin(delta);
 		cosA = cos(delta);
 		std::cout << sinA << " " << cosA << std::endl;

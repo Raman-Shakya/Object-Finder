@@ -14,24 +14,27 @@
 class World {
 	char tempGrid[MAX_LEVEL][MAX_LEVEL];	// map in character grid
 	Block *mainGrid[MAX_LEVEL][MAX_LEVEL];  // main map to render
+	Object *obj;
 	int currentLevel;	// size of the current nxn level
-	int seed = 1;
+	int seed;
 	
 	void resetLevel() {
 		int i, j;
 		for (i=0; i<currentLevel; i++) {
 			for (j=0; j<currentLevel; j++) {
 				tempGrid[i][j] = '#';
+				delete mainGrid[i][j];
 				mainGrid[i][j] = NULL;
 			}
 		}
+		delete player;
+		player = new Player();
 		drawLevel();
 	}
 	void generateLevel(char temp[MAX_LEVEL][MAX_LEVEL], int i, int j) {
 		if (i==currentLevel-2 && j==currentLevel-2) {
 			return;
 		}
-	    srand(seed);
 	    
 		std::vector< std::pair<int, int> > orientation;
 		orientation.push_back({0, -1});
@@ -39,7 +42,7 @@ class World {
 		orientation.push_back({-1, 0});
 		orientation.push_back({1,  0});
 		std::random_shuffle(orientation.begin(), orientation.end());
-		seed = rand();
+		rand();
 		
 		// main part
 		int iter;
@@ -54,6 +57,7 @@ class World {
 	}
 	void drawLevel() {
 		char temp[MAX_LEVEL][MAX_LEVEL];
+		srand(currentLevel);
 		int i,j;
 		temp[1][1] = ' ';
 		// empty
@@ -77,20 +81,20 @@ class World {
 					mainGrid[i][j] = NULL;
 			}
 		}
+		placeObject();
 	}
-	void pushFromBlock(Player &pl, int x, int z) {
-		std::cout << "before: " << pl.pos[0] << " " << pl.pos[2] << std::endl;
-		// player should not be within x-WIDTH/2 to x+width/2
-		if (pl.pos[0] < x*WIDTH && pl.pos[0]>(x-0.5)*WIDTH) pl.pos[0] = (x-0.6)*WIDTH;
-		if (pl.pos[0] > x*WIDTH && pl.pos[0]>(x+0.5)*WIDTH) pl.pos[0] = (x+0.6)*WIDTH;
-		// player should not be within z-WIDTH/2 to z+width/2
-		if (pl.pos[2] < z*WIDTH && pl.pos[2]>(z-0.5)*WIDTH) pl.pos[2] = (z-0.6)*WIDTH;
-		if (pl.pos[2] > z*WIDTH && pl.pos[2]>(z+0.5)*WIDTH) pl.pos[2] = (z+0.6)*WIDTH;
-		std::cout << "after: " << pl.pos[0] << " " << pl.pos[2] << std::endl;
+	
+	void placeObject() {
+		int i = rand() % currentLevel, j = rand() % currentLevel;
+		if (tempGrid[i][j]=='#') return placeObject();
+		tempGrid[i][j] = 'o';
+		obj = new Object(i, j);
 	}
 	
 public:
-	World(int level=10) {
+	Player *player;
+	
+	World(int level=3) {
 		currentLevel = level;	
 		resetLevel();
 	}
@@ -102,6 +106,8 @@ public:
 					delete mainGrid[i][j];
 			}
 		}
+		delete obj;
+		delete player;
 	}
 	void render() {
 		int i, j;
@@ -112,10 +118,16 @@ public:
 				}
 			}
 		}
+		obj->render();
 	}
 	
-	void correctPlayer(Player &pl) {
-		int posx = round(pl.pos[0]/WIDTH), posz = round(pl.pos[2]/WIDTH);
+	void correctPlayer() {
+		int posx = round(player->pos[0]/WIDTH), posz = round(player->pos[2]/WIDTH);
+		
+		if (tempGrid[posx][posz]=='o') {
+			std::cout << "block found\n";
+			nextLevel();
+		}
 
 		int upBlock = tempGrid[posx-1][posz] == '#',
 			downBlock = tempGrid[posx+1][posz] == '#',
@@ -123,16 +135,21 @@ public:
 			rightBlock = tempGrid[posx][posz-1] == '#';
 		
 		if (upBlock) {
-			if (pl.pos[0] < (posx-0.3)*WIDTH) pl.pos[0] = (posx-0.3)*WIDTH;
+			if (player->pos[0] < (posx-0.3)*WIDTH) player->pos[0] = (posx-0.3)*WIDTH;
 		}
 		if (downBlock) {
-			if (pl.pos[0] > (posx+0.3)*WIDTH) pl.pos[0] = (posx+0.3)*WIDTH;
+			if (player->pos[0] > (posx+0.3)*WIDTH) player->pos[0] = (posx+0.3)*WIDTH;
 		}
 		if (leftBlock) {
-			if (pl.pos[2] > (posz+0.3)*WIDTH) pl.pos[2] = (posz+0.3)*WIDTH;
+			if (player->pos[2] > (posz+0.3)*WIDTH) player->pos[2] = (posz+0.3)*WIDTH;
 		}
 		if (rightBlock) {
-			if (pl.pos[2] < (posz-0.3)*WIDTH) pl.pos[2] = (posz-0.3)*WIDTH;
+			if (player->pos[2] < (posz-0.3)*WIDTH) player->pos[2] = (posz-0.3)*WIDTH;
 		}
+	}
+	
+	void nextLevel() {
+		currentLevel += 2;
+		resetLevel();
 	}
 };
