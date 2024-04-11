@@ -64,11 +64,15 @@ class World {
 			for (j=0; j<currentLevel; j++)
 				temp[i][j]='#';
 		generateLevel(temp, 1, 1);
-//		for (i=0; i<currentLevel; i++){
-//			for (j=0; j<currentLevel; j++)
-//				std::cout << temp[i][j] << " ";
-//			std::cout << std::endl;
-//		}
+		
+		// draw level on console
+		system("cls");
+		std::cout << "level: " << (currentLevel-2)/2 << std::endl;
+		for (i=currentLevel-1; i>=0; i--){
+			for (j=0; j<currentLevel; j++)
+				std::cout << temp[i][j] << " ";
+			std::cout << std::endl;
+		}
 				
 				
 		for (i=0; i<currentLevel; i++) {

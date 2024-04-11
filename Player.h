@@ -12,12 +12,6 @@ class Player {
 	GLfloat dir[4];
 	double delta, cosA, sinA;
 	
-	void showData() {
-		std::cout << "position: " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
-		std::cout << "direction:" << dir[0] << " " << dir[1] << " " << dir[2] << std::endl;
-
-	}
-	
 public:
 	Player() {
 		delta = 0.1;
@@ -25,7 +19,6 @@ public:
 		dir[0] = 0.05; dir[1] = 0; dir[2] = 0.05;
 		sinA = sin(delta);
 		cosA = cos(delta);
-		std::cout << sinA << " " << cosA << std::endl;
 	}
 	~Player() {
 	}
