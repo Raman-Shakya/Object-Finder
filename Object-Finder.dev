@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
 CompilerSettings=0000000100000000000000000
-UnitCount=6
+UnitCount=8
 
 [VersionInfo]
 Major=1
@@ -111,7 +111,17 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=Cuboid.h
+FileName=Game.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit8]
+FileName=graphicsTools.h
 CompileCpp=1
 Folder=
 Compile=1
