@@ -15,7 +15,6 @@ class World {
 	char tempGrid[MAX_LEVEL][MAX_LEVEL];	// map in character grid
 	Block *mainGrid[MAX_LEVEL][MAX_LEVEL];  // main map to render
 	Object *obj;
-	int currentLevel;	// size of the current nxn level
 	int seed;
 	
 	void resetLevel() {
@@ -57,7 +56,7 @@ class World {
 	}
 	void drawLevel() {
 		char temp[MAX_LEVEL][MAX_LEVEL];
-		srand(currentLevel);
+		// srand(currentLevel);
 		int i,j;
 		temp[1][1] = ' ';
 		// empty
@@ -65,11 +64,11 @@ class World {
 			for (j=0; j<currentLevel; j++)
 				temp[i][j]='#';
 		generateLevel(temp, 1, 1);
-		for (i=0; i<currentLevel; i++){
-			for (j=0; j<currentLevel; j++)
-				std::cout << temp[i][j] << " ";
-			std::cout << std::endl;
-		}
+//		for (i=0; i<currentLevel; i++){
+//			for (j=0; j<currentLevel; j++)
+//				std::cout << temp[i][j] << " ";
+//			std::cout << std::endl;
+//		}
 				
 				
 		for (i=0; i<currentLevel; i++) {
@@ -92,6 +91,7 @@ class World {
 	}
 	
 public:
+	int currentLevel;	// size of the current nxn level
 	Player *player;
 	
 	World(int level=3) {
