@@ -2,3 +2,5 @@
 *.exe
 *.docx
 .vscode
+*.layout
+*.win
